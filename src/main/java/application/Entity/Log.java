@@ -16,12 +16,12 @@ public class Log {
     private String operation;
 
     @ManyToOne
-    private User user;
+    private Users user;
 
     public Log() {
     }
 
-    public Log(long id, Timestamp timestamp, String operation, User user) {
+    public Log(long id, Timestamp timestamp, String operation, Users user) {
         this.id = id;
         this.timestamp = timestamp;
         this.operation = operation;
@@ -52,11 +52,11 @@ public class Log {
         this.operation = operation;
     }
 
-    public User getUser() {
+    public Users getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(Users user) {
         this.user = user;
     }
 }

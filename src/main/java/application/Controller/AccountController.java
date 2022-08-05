@@ -3,14 +3,13 @@ package application.Controller;
 import application.Entity.Account;
 import application.Entity.Client;
 import application.Entity.Log;
-import application.Entity.User;
+import application.Entity.Users;
 import application.Repository.AccountRepository;
 import application.Repository.ClientRepository;
 import application.Repository.LogRepository;
 import application.Repository.UserRepository;
 import application.Validator.AccountValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,7 +66,7 @@ public class AccountController {
 
         String username = request.getRemoteUser();
 
-        User user = userRepository.findByUsername(username);
+        Users user = userRepository.findByUsername(username);
         log.setUser(user);
 
         logRepository.save(log);
@@ -107,7 +106,7 @@ public class AccountController {
 
         String username = request.getRemoteUser();
 
-        User user = userRepository.findByUsername(username);
+        Users user = userRepository.findByUsername(username);
         log.setUser(user);
 
         logRepository.save(log);

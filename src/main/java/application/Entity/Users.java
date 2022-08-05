@@ -1,15 +1,11 @@
 package application.Entity;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Set;
 import javax.persistence.Column;
 
 @Entity
-public class User {
+public class Users {
 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
@@ -25,10 +21,10 @@ public class User {
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    public User() {
+    public Users() {
     }
 
-    public User(String username, String password) {
+    public Users(String username, String password) {
         this.username = username;
         this.password = password;
     }

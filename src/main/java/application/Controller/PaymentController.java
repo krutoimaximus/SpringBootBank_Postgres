@@ -2,7 +2,7 @@ package application.Controller;
 
 import application.Entity.Account;
 import application.Entity.Log;
-import application.Entity.User;
+import application.Entity.Users;
 import application.Repository.AccountRepository;
 import application.Repository.LogRepository;
 import application.Repository.UserRepository;
@@ -55,7 +55,7 @@ public class PaymentController {
 
         String username = request.getRemoteUser();
 
-        User user = userRepository.findByUsername(username);
+        Users user = userRepository.findByUsername(username);
         log.setUser(user);
 
         logRepository.save(log);

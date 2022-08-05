@@ -3,7 +3,7 @@ package application.Controller;
 import application.Entity.Employee;
 import application.Entity.Log;
 import application.Entity.Role;
-import application.Entity.User;
+import application.Entity.Users;
 import application.Repository.EmployeeRepository;
 import application.Repository.LogRepository;
 import application.Repository.RoleRepository;
@@ -66,7 +66,7 @@ public class AdminController {
         else
             return "redirect:/admin/new?error=true";
 
-        User user = new User();
+        Users user = new Users();
         user.setUsername(request.getParameter("username"));
         user.setPassword(request.getParameter("password"));
 
@@ -80,7 +80,7 @@ public class AdminController {
 
         String username = request.getRemoteUser();
 
-        User activeUser = userRepository.findByUsername(username);
+        Users activeUser = userRepository.findByUsername(username);
         log.setUser(activeUser);
 
         logRepository.save(log);
@@ -114,7 +114,7 @@ public class AdminController {
 
         String username = request.getRemoteUser();
 
-        User user = userRepository.findByUsername(username);
+        Users user = userRepository.findByUsername(username);
         log.setUser(user);
 
         logRepository.save(log);
@@ -163,7 +163,7 @@ public class AdminController {
     @RequestMapping(value = "/report",method = RequestMethod.POST)
     public ModelAndView searchEmployee(HttpServletRequest request) throws Exception {
         ModelAndView modelAndView = new ModelAndView("admin/showReport");
-        User user = userRepository.findOne(Long.parseLong(request.getParameter("id")));
+        Users user = userRepository.findOne(Long.parseLong(request.getParameter("id")));
         DateFormat format = new SimpleDateFormat("yyyy-M-dd");
         Date from = format.parse(request.getParameter("from"));
         Date to = format.parse(request.getParameter("to"));

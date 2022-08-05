@@ -1,12 +1,10 @@
 package application.Repository;
 
-import application.Entity.User;
+import application.Entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.LinkedHashMap;
-
 @Repository
-public interface UserRepository extends JpaRepository<User,Long> {
-    User findByUsername(String username);
+public interface UserRepository extends JpaRepository<Users,Long> {
+    Users findByUsername(String username);
 }

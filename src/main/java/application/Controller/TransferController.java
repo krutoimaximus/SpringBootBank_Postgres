@@ -2,7 +2,7 @@ package application.Controller;
 
 import application.Entity.Account;
 import application.Entity.Log;
-import application.Entity.User;
+import application.Entity.Users;
 import application.Repository.AccountRepository;
 import application.Repository.LogRepository;
 import application.Repository.UserRepository;
@@ -13,8 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.LocaleContextResolver;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
@@ -71,7 +69,7 @@ public class TransferController {
 
         String username = request.getRemoteUser();
 
-        User user = userRepository.findByUsername(username);
+        Users user = userRepository.findByUsername(username);
         log.setUser(user);
 
         logRepository.save(log);

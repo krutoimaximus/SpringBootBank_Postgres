@@ -1,11 +1,6 @@
 package application.Entity;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
-import java.util.Collection;
 
 @Entity
 @Table(name = "employee")
@@ -25,12 +20,12 @@ public class Employee {
 
     @OneToOne
     @JoinColumn(name = "user_id")
-    private User username;
+    private Users username;
 
     public Employee() {
     }
 
-    public Employee(long id, String name, Double salary, String email, String phone, User username) {
+    public Employee(long id, String name, Double salary, String email, String phone, Users username) {
         this.id = id;
         this.name = name;
         this.salary = salary;
@@ -79,11 +74,11 @@ public class Employee {
         this.phone = phone;
     }
 
-    public User getUsername() {
+    public Users getUsername() {
         return username;
     }
 
-    public void setUsername(User username) {
+    public void setUsername(Users username) {
         this.username = username;
     }
 }

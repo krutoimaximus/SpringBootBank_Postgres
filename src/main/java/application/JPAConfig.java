@@ -1,3 +1,4 @@
+
 package application;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
@@ -96,3 +97,4 @@ public class JPAConfig {
 
 
 }
+

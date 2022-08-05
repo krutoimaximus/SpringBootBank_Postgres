@@ -4,6 +4,7 @@ import application.Entity.Client;
 
 public class ClientValidator {
 
+
     public boolean validate(Client client) {
         return validateCNP(client.getCnp()) && validateEmail(client.getEmail()) && validateName(client.getName());
     }
