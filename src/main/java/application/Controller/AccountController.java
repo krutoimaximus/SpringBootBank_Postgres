@@ -8,7 +8,10 @@ import application.Repository.AccountRepository;
 import application.Repository.ClientRepository;
 import application.Repository.LogRepository;
 import application.Repository.UserRepository;
+import application.Service.AccountService;
 import application.Validator.AccountValidator;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +28,9 @@ import java.sql.Timestamp;
 public class AccountController {
 
     @Autowired
+    private AccountService accountService;
+
+    @Autowired
     private AccountRepository accountRepository;
 
     @Autowired
@@ -38,6 +44,9 @@ public class AccountController {
 
     private AccountValidator validator;
 
+    public AccountController() {
+    }
+
     @RequestMapping(value = "new",method = RequestMethod.GET)
     public String newAccount() {
         return "account/new";
@@ -45,88 +54,28 @@ public class AccountController {
 
     @RequestMapping(value = "new", method = RequestMethod.POST)
     public String addAccount(HttpServletRequest request) {
-        Account account = new Account();
-        account.setBalance(Double.parseDouble(request.getParameter("balance")));
-        account.setDate(new Date(System.currentTimeMillis()));
-        account.setType(request.getParameter("type"));
-        validator = new AccountValidator();
-        Client client = clientRepository.findByName(request.getParameter("name"));
-        if(client != null)
-            account.setOwner(client);
-        else
-            return "account/new?error=true";
-        if(validator.validate(account))
-            accountRepository.save(account);
-        else
-            return "account/new?error=true";
-
-        Log log = new Log();
-        log.setOperation("Account added. ID: " + account.getId() + "; Owner: " + account.getOwner().getName());
-        log.setTimestamp(new Timestamp(System.currentTimeMillis()));
-
-        String username = request.getRemoteUser();
-
-        Users user = userRepository.findByUsername(username);
-        log.setUser(user);
-
-        logRepository.save(log);
-
-        return "redirect:/index";
+        return accountService.addAccount(request);
     }
+
 
     @RequestMapping(value = "{id}/edit",method = RequestMethod.GET)
     public String update(@PathVariable long id, Model model) {
-        Account account = accountRepository.findOne(id);
-        Client client = clientRepository.findOne(account.getOwner().getId());
-        model.addAttribute("owner",client);
-        model.addAttribute("account",account);
-        return "account/edit";
+        return accountService.update(id, model);
     }
 
     @RequestMapping(value = "update",method = RequestMethod.POST)
     public String updateAccount(HttpServletRequest request) {
-        Account account = accountRepository.findOne(Long.parseLong(request.getParameter("id")));
-        account.setBalance(Double.parseDouble(request.getParameter("balance")));
-        account.setType(request.getParameter("type"));
-
-        Client client = clientRepository.findOne(account.getOwner().getId());
-        account.setOwner(client);
-        if(client != null)
-            account.setOwner(client);
-        else
-            return "account/new?error=true";
-        if(validator.validate(account))
-            accountRepository.save(account);
-        else
-            return "account/new?error=true";
-        accountRepository.save(account);
-        Log log = new Log();
-        log.setOperation("Account updated. ID: " + account.getId() + "; Owner: " + account.getOwner().getName());
-        log.setTimestamp(new Timestamp(System.currentTimeMillis()));
-
-        String username = request.getRemoteUser();
-
-        Users user = userRepository.findByUsername(username);
-        log.setUser(user);
-
-        logRepository.save(log);
-
-        return "redirect:/index";
+        return accountService.updateAccount(request);
     }
 
     @RequestMapping(value = "/{id}/view",method = RequestMethod.GET)
     public String view(@PathVariable long id, Model model) {
-        Account account = accountRepository.findOne(id);
-        Client client = account.getOwner();
-        model.addAttribute("client",client);
-        model.addAttribute("account",account);
-        return "account/view";
+       return accountService.view(id, model);
     }
 
     @RequestMapping(value = "/{id}/delete",method = RequestMethod.GET)
     public String delete(@PathVariable long id) {
-        accountRepository.delete(id);
-        return "redirect:/index";
+       return accountService.delete(id);
     }
 
     @RequestMapping(value = "/search",method = RequestMethod.GET)
@@ -135,18 +84,7 @@ public class AccountController {
     }
     @RequestMapping(value = "/search",method = RequestMethod.POST)
     public String search(HttpServletRequest request) {
-        Account account = accountRepository.findOne(Long.parseLong(request.getParameter("id")));
-        String option = request.getParameter("option");
-        if(option.equals("VIEW")) {
-            return "redirect:/account/" + account.getId() + "/view";
-        }
-        if(option.equals("EDIT")) {
-            return "redirect:/account/" + account.getId() + "/edit";
-        }
-        if(option.equals("DELETE")) {
-            return "redirect:/account/" + account.getId() + "/delete";
-        }
-        return "redirect:/account/search";
+       return accountService.search(request);
     }
 
 

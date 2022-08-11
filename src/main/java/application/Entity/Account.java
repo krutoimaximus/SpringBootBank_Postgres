@@ -2,6 +2,8 @@ package application.Entity;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 @Entity
@@ -9,10 +11,13 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+
     private long id;
 
+    @NotNull
     private String type;
 
+    @NotNull
     private double balance;
 
     private Date date;

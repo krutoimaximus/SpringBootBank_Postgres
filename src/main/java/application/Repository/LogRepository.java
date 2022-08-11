@@ -7,9 +7,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LogRepository extends JpaRepository<Log,Long> {
+
+
     Log findByUser(Users user);
 
     List<Log> findByUserAndTimestampBetween(Users user, Date from, Date to);

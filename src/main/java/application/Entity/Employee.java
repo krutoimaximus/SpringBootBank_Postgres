@@ -1,6 +1,9 @@
 package application.Entity;
 
+import org.hibernate.validator.constraints.Email;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "employee")
@@ -10,12 +13,17 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @NotNull
     private String name;
 
+    @NotNull
     private Double salary;
 
+    @NotNull
+    @Email
     private String email;
 
+    @NotNull
     private String phone;
 
     @OneToOne

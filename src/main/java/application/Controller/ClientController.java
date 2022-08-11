@@ -6,6 +6,7 @@ import application.Entity.Users;
 import application.Repository.ClientRepository;
 import application.Repository.LogRepository;
 import application.Repository.UserRepository;
+import application.Service.ClientService;
 import application.Validator.ClientValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,9 @@ import java.sql.Timestamp;
 @Controller
 @RequestMapping("/clientOp")
 public class ClientController {
+
+    @Autowired
+    private ClientService clientService;
 
     @Autowired
     private ClientRepository clientRepository;
@@ -39,69 +43,22 @@ public class ClientController {
 
     @RequestMapping(value = "new",method = RequestMethod.POST)
     public String addClient(HttpServletRequest request) {
-        Client client = new Client();
-        client.setName(request.getParameter("name"));
-        client.setAddress(request.getParameter("address"));
-        client.setEmail(request.getParameter("email"));
-        client.setCnp(request.getParameter("CNP"));
-        validator = new ClientValidator();
-        if(validator.validate(client))
-            clientRepository.save(client);
-        else
-            return "redirect:/clientOp/new?error=true";
-
-        Log log = new Log();
-        log.setOperation("Client added. ID: " + client.getId() + "; Name: " + client.getName());
-        log.setTimestamp(new Timestamp(System.currentTimeMillis()));
-
-        String username = request.getRemoteUser();
-
-        Users user = userRepository.findByUsername(username);
-        log.setUser(user);
-
-        logRepository.save(log);
-        return "redirect:/index";
+       return clientService.addClient(request);
     }
 
     @RequestMapping(value = "/{id}/edit",method = RequestMethod.GET)
     public String update(@PathVariable long id, Model model) {
-        Client client = clientRepository.findOne(id);
-        model.addAttribute("client",client);
-        return "clientOp/edit";
+       return clientService.update(id, model);
     }
+
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public String updateClient(HttpServletRequest request) {
-        Client client = clientRepository.findOne(Long.parseLong(request.getParameter("id")));
-        client.setName(request.getParameter("name"));
-        client.setAddress(request.getParameter("address"));
-        client.setEmail(request.getParameter("email"));
-        client.setCnp(request.getParameter("CNP"));
-        validator = new ClientValidator();
-        if(validator.validate(client))
-            clientRepository.save(client);
-        else
-            return "redirect:/clientOp/new?error=true";
-        clientRepository.save(client);
-
-        Log log = new Log();
-
-        log.setOperation("Client updated. ID: " + client.getId() + "; Name: " + client.getName());
-        log.setTimestamp(new Timestamp(System.currentTimeMillis()));
-
-        String username = request.getRemoteUser();
-
-        Users user = userRepository.findByUsername(username);
-        log.setUser(user);
-        logRepository.save(log);
-        return "redirect:/index";
+       return clientService.updateClient(request);
     }
-
 
     @RequestMapping(value = "/{id}/view",method = RequestMethod.GET)
     public String view(@PathVariable long id, Model model) {
-        Client client = clientRepository.findOne(id);
-        model.addAttribute("client",client);
-        return "clientOp/view";
+        return clientService.view(id, model);
     }
 
     @RequestMapping(value = "/search",method = RequestMethod.GET)
@@ -110,14 +67,6 @@ public class ClientController {
     }
     @RequestMapping(value = "/search",method = RequestMethod.POST)
     public String search(HttpServletRequest request) {
-        Client client = clientRepository.findOne(Long.parseLong(request.getParameter("id")));
-        String option = request.getParameter("option");
-        if(option.equals("VIEW")) {
-            return "redirect:/clientOp/" + client.getId() + "/view";
-        }
-        if(option.equals("EDIT")) {
-            return "redirect:/clientOp/" + client.getId() + "/edit";
-        }
-        return "redirect:/clientOp/search";
+       return clientService.search(request);
     }
 }

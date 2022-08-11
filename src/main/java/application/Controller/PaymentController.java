@@ -6,6 +6,8 @@ import application.Entity.Users;
 import application.Repository.AccountRepository;
 import application.Repository.LogRepository;
 import application.Repository.UserRepository;
+import application.Service.ClientService;
+import application.Service.PaymentService;
 import application.Validator.TransactionValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,9 @@ import java.sql.Timestamp;
 @Controller
 @RequestMapping("/payment")
 public class PaymentController {
+
+    @Autowired
+    private PaymentService paymentService;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -37,29 +42,6 @@ public class PaymentController {
 
     @RequestMapping(method = RequestMethod.POST)
     public String process(HttpServletRequest request) {
-        Account account = accountRepository.getOne(Long.parseLong(request.getParameter("id")));
-        Double amount = Double.parseDouble(request.getParameter("amount"));
-        String type = request.getParameter("bill");
-        validator = new TransactionValidator();
-        if(validator.validate(account,amount)) {
-            account.setBalance(account.getBalance() - amount);
-            accountRepository.save(account);
-        }
-        else
-            return "redirect:/payment?error=true";
-
-
-        Log log = new Log();
-        log.setOperation("Utilities payment: Account ID: " + account.getId() + " Amount: " + amount + " Type: " + type);
-        log.setTimestamp(new Timestamp(System.currentTimeMillis()));
-
-        String username = request.getRemoteUser();
-
-        Users user = userRepository.findByUsername(username);
-        log.setUser(user);
-
-        logRepository.save(log);
-
-        return "redirect:/index";
+      return paymentService.process(request);
     }
 }

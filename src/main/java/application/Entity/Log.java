@@ -1,5 +1,7 @@
 package application.Entity;
 
+import lombok.RequiredArgsConstructor;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -27,6 +29,8 @@ public class Log {
         this.operation = operation;
         this.user = user;
     }
+
+
 
     public long getId() {
         return id;
